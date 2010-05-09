@@ -1,0 +1,20 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=3089
+
+Keyboard shotcuts
+=================
+
+,c
+    Create a task.
+,s
+    Create a subtask
+,d
+    Mark Done
+,r
+    Mark as cancel
+,1
+    Convert to OTL style
+,2
+    Convert to litle box style
+,3
+    Convert to single sytyle
+
