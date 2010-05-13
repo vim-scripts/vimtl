@@ -2,7 +2,7 @@
 " Hopefully this should make snippets a bit nicer to write!
 syn match tlComment '^\s*[#|:].*'
 syn match  tlListItem  "^\s*[☐]\s\+" 
-syn match  tlDone "^\s*[☑☒]\s.*"
+syn match  tlDone "^\s*[✔✕☑☒]\s.*"
 
 
 hi link tlComment        Comment

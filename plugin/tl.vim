@@ -6,36 +6,59 @@ import re
 import string
  
 DEFAULT_MARK = '☐'
-MARKS = ['☐', '☑', '[_]', '[X]', '☒']
+MARKS = ['☐', '☑', '[_]', '[?]', '✕', '✔', '_ ', '[X]', '☒']
 INDENT_WIDTH = 2
 TO_DONE_DICT = {
                 '☐': '☑', 
+                '☒': '☑',
+                '_ ': '✔ ',
+                '✕ ': '✔ ',
                 '[_]': '[X]',
-                 '☒': '☑',
+                '[?]': '[X]',
                }
 TO_EMPTY_DICT = {
                  '☑': '☐', 
-                 '[X]': '[_]',
                  '☒': '☐',
+                 '✔': '_',
+                 '✕': '_',
+                 '[X]': '[_]',
+                 '[?]': '[_]',
                 }
 TO_CANCEL_DICT = {
                 '☐': '☒', 
-                '[_]': '[X]',
                 '☑': '☒',
+                '_ ': '✕ ',
+                '✔': '✕',
+                '[_]': '[?]',
+                '[X]': '[?]',
                }
 
 TO_OTL = {
         '☐': '[_]',
-        '☒': '[-]',
+        '☒': '[?]',
         '☑': '[X]',
+        '✔': '[X]',
+        '✕': '[?]',
+        '_ ': '[_] ',
 }
 
 TO_BOX = {
+        '✔': '☑',
+        '✕': '☒',
+        '_ ': '☐ ',
         '[_]': '☐',
-        '[-]': '☒',
+        '[?]': '☒',
         '[X]': '☑',
 }
 
+TO_SINGLE = {
+        '☐': '_',
+        '☒': '✕',
+        '☑': '✔',
+        '[_]': '_',
+        '[?]': '✕',
+        '[X]': '✔',
+}
 
 def detectMarkStyle():
     # Explora las primeras 10 lineas del buffer
@@ -109,6 +132,15 @@ def tlConvertToBOX():
 
     ChangeDefaultMark('☐')
 
+def tlConvertToSingle():
+    "Convierte todas las casillas estilo vimoutliner al formato simple"
+    size = len(vim.current.buffer)
+
+    for i in range(0, size):
+        vim.current.buffer[i] = replace_all(vim.current.buffer[i], TO_SINGLE)
+
+    ChangeDefaultMark('_')
+
 def has_a_task_mark_in_this_line():
     "Indica si la linea actual tiene una casilla de tarea."
     for x in MARKS:
@@ -154,6 +186,11 @@ fun! Loadvimtl()
     " Transforma de una notación a la otra
     map ,1 :python tlConvertToOTL()<CR>
     map ,2 :python tlConvertToBOX()<CR>
+    map ,3 :python tlConvertToSingle()<CR>
+
+    imap ,1 <ESC>,1a
+    imap ,2 <ESC>,2a
+    imap ,3 <ESC>,3a
 
     " Crea o limpia una tarea. 
     " 'C' viene de Create y Clear.
