@@ -42,7 +42,6 @@ def detectMarkStyle():
     # para determinar el caracter de casilla que se
     # utiliza en el documento.
     for line in vim.current.buffer:
-        print line
         if have_any_of_this_charactes(line, ['[_]', '[X]']):
             ChangeDefaultMark('[_]')
             return
@@ -150,36 +149,40 @@ EOF
 
 
 
-" Transforma de una notación a la otra
-map ,1 :python tlConvertToOTL()<CR>
-map ,2 :python tlConvertToBOX()<CR>
 
-" Crea o limpia una tarea. 
-" 'C' viene de Create y Clear.
-map ,c :python CreateTask()<CR>A
-imap ,c <ESC>,c
+fun! Loadvimtl()
+    " Transforma de una notación a la otra
+    map ,1 :python tlConvertToOTL()<CR>
+    map ,2 :python tlConvertToBOX()<CR>
 
-" Agrega una tarea a la lista actual.
-" 'A' viene de append.
-map ,a :python CreateTaskIndent()<CR>A
-imap ,a <ESC>,a
+    " Crea o limpia una tarea. 
+    " 'C' viene de Create y Clear.
+    map ,c :python CreateTask()<CR>A
+    imap ,c <ESC>,c
 
-" Genera una subtarea para la tarea actual.
-" 'S' viene de SubTask.
-map  ,s :python CreateSubTask()<CR>A
-imap ,s <ESC>,s
+    " Agrega una tarea a la lista actual.
+    " 'A' viene de append.
+    map ,a :python CreateTaskIndent()<CR>A
+    imap ,a <ESC>,a
 
-" Marca una tarea como realizada.
-" 'D' viene de Done.
-imap ,d <ESC>:python MarkDone()<CR>A
-map  ,d :python MarkDone()<CR>
+    " Genera una subtarea para la tarea actual.
+    " 'S' viene de SubTask.
+    map  ,s :python CreateSubTask()<CR>A
+    imap ,s <ESC>,s
 
-" Genera una subtarea para la tarea actual.
-" 'R' viene de Reject.
-map  ,r :python MarkCancel()<CR>A
-imap ,r <ESC>,r
+    " Marca una tarea como realizada.
+    " 'D' viene de Done.
+    imap ,d <ESC>:python MarkDone()<CR>A
+    map  ,d :python MarkDone()<CR>
 
-:python detectMarkStyle()
+    " Genera una subtarea para la tarea actual.
+    " 'R' viene de Reject.
+    map  ,r :python MarkCancel()<CR>A
+    imap ,r <ESC>,r
 
+    :python detectMarkStyle()
+
+    set ft=tl
+endf
 
 endif
